@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Card from "@components/card/card";
+import Loading from "@components/loading/loading";
+import ErrorPage from "@components/errorPage/errorPage";
 import API from "@src/apiPath";
-import "./index.css";
 import { GenericPageProps } from "@types";
+import "./style.css";
 import usePostsReducer from "@hooks/usePostsReducer";
 
 export default ({ newError }: GenericPageProps) => {
@@ -45,17 +47,20 @@ export default ({ newError }: GenericPageProps) => {
   };
 
   return (
-    <div className="content">
-      {isLoading && <h1>Loading</h1>}
-      {error && <h1>Error</h1>}
-      {data.map((el) => (
-        <Card
-          key={el._id}
-          data={el}
-          deletePost={deletePost}
-          newError={newError}
-        />
-      ))}
-    </div>
+    <>
+      {isLoading && <Loading/>}
+      {error && <ErrorPage/>}
+      {
+        !error && !isLoading &&<div className="home">
+          {data.map((el) => (
+            <Card
+              key={el._id}
+              data={el}
+              deletePost={deletePost}
+              newError={newError}
+            />))}
+        </div>
+      }
+    </>
   );
 };

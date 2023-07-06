@@ -1,0 +1,36 @@
+.errors {
+  width: 16rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: grid;
+  gap: .5rem;
+  margin-right: 1rem;
+}
+.errors >:last-child {
+  margin-bottom: 1rem;
+}
+.error {
+  animation: comeIn 250ms, moveOut 250ms 4000ms;
+  animation-fill-mode: forwards;
+  background: var(--error);
+  color: var(--bg);
+  padding: 1rem;
+  border-radius: 5px;
+}
+@keyframes comeIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+@keyframes moveOut {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(150%);
+  }
+}

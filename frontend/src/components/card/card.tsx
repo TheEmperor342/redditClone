@@ -6,6 +6,7 @@ import { BsDot } from "react-icons/bs";
 import { MdDeleteForever, MdModeEditOutline } from "react-icons/md";
 import API from "@src/apiPath";
 import { TokenContext } from "@src/TokenContext";
+import { Link } from "react-router-dom";
 
 const Card: React.FC<CardProps> = ({ data, deletePost, newError }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -92,30 +93,33 @@ const Card: React.FC<CardProps> = ({ data, deletePost, newError }) => {
       <div className="cardUpDownButtons">
         {token !== null ? (
           <>
-            <button onClick={likeOrDislike}>
+            <button
+              onClick={likeOrDislike}
+              className={"primary-btn " + (isLiked ? "clicked" : "")}
+            >
               {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
             </button>
             <BsDot />
           </>
         ) : (
-          <p>
+          <>
             <AiOutlineHeart />
             <BsDot />
-          </p>
+          </>
         )}
         <p>{isError ? "Couldn't fetch data" : likes}</p>
         {data.poster === username ? (
           <>
             <BsDot />
-            <button onClick={handleDelete}>
+            <button onClick={handleDelete} className="primary-btn">
               <MdDeleteForever />
             </button>
             <BsDot />
-            <button>
-            <a href={`/modifyPost/${data._id}`}>
-              <MdModeEditOutline />
-              </a>
-            </button>
+            <Link to={`/modifyPost/${data._id}`}>
+              <button className="primary-btn">
+                <MdModeEditOutline />
+              </button>
+            </Link>
           </>
         ) : (
           <></>

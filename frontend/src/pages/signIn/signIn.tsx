@@ -1,6 +1,5 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import "./index.css";
-import {
+import React, {
   ChangeEvent,
   FormEvent,
   useCallback,
@@ -9,8 +8,9 @@ import {
 } from "react";
 import API from "@src/apiPath";
 import { TokenContext } from "@src/TokenContext";
+import { GenericPageProps } from "@types";
 
-export default () => {
+const SignIn: React.FC<GenericPageProps> = ({ newError }) => {
   const location = useLocation();
 
   const { token, setToken } = useContext(TokenContext);
@@ -19,7 +19,6 @@ export default () => {
 
   const [usernameVal, setUsernameVal] = useState("");
   const [passwordVal, setPasswordVal] = useState("");
-  const [error, setError] = useState({ error: false, message: "" });
   const navigate = useNavigate();
 
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,9 +44,10 @@ export default () => {
       });
 
       if (!res.ok) {
-        setError({
-          error: true,
-          message:
+        newError({
+          id: self.crypto.randomUUID(),
+          title: "Error",
+          error:
             res.status === 400
               ? "Invalid Credentials"
               : "Unknown error occured",
@@ -60,39 +60,44 @@ export default () => {
       navigate("/");
     } catch (err: any) {
       console.error(err);
-      setError({ error: true, message: "Unknown error occured" });
+      newError({
+        id: self.crypto.randomUUID(),
+        title: "Error",
+        error: String(err),
+      });
     }
   }, []);
 
   return (
-    <div className="signInContainer">
-      {error.error && (
-        <p>
-          <strong>Error: </strong>
-          {error.message}
-        </p>
-      )}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username: <br />
-          <input
-            type="text"
-            value={usernameVal}
-            onChange={handleUsernameChange}
-          />
-        </label>
-        <br />
-        <label>
-          Password: <br />
-          <input
-            type="password"
-            value={passwordVal}
-            onChange={handlePasswordChange}
-          />
-        </label>
-        <br />
-        <button type="submit">Sign In</button>
-      </form>
+    <div className="loginContainer">
+      <div className="loginWrapper">
+        <form onSubmit={handleSubmit} className="loginForm">
+          <h1>Sign in to RedditClone</h1>
+          <label>
+            Username: <br />
+            <input
+              type="text"
+              value={usernameVal}
+              onChange={handleUsernameChange}
+            />
+          </label>
+          <br />
+          <label>
+            Password: <br />
+            <input
+              type="password"
+              value={passwordVal}
+              onChange={handlePasswordChange}
+            />
+          </label>
+          <br />
+          <button type="submit" className="primary-btn">
+            Sign In
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
+
+export default SignIn;
